@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.simple
     ports:
-      - "5000:5000"
+      - "5030:5000"
     environment:
       - FLAG=centralctf{csrf_1s_n0t_d3ad_yet}
     restart: unless-stopped
