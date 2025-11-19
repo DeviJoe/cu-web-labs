@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - User Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .result-box {
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .result-box.success {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .result-box.error {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .result-box.not-found {
+            background: #fff3cd;
+            border: 2px solid #ffeeba;
+            color: #856404;
+        }
+
+        .result-box .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .result-box h2 {
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .result-box p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: transform 0.2s;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .back-button:active {
+            transform: translateY(0);
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Search Results</h1>
+
+        {% if error %}
+        <div class="result-box error">
+            <div class="icon">🚫</div>
+            <h2>Error</h2>
+            <p>{{ error }}</p>
+        </div>
+        {% elif success %}
+            {% if found %}
+            <div class="result-box success">
+                <div class="icon">✅</div>
+                <h2>User Found</h2>
+                <p>A user with the specified ID exists in the database.</p>
+            </div>
+            {% else %}
+            <div class="result-box not-found">
+                <div class="icon">❌</div>
+                <h2>User Not Found</h2>
+                <p>No user with the specified ID was found in the database.</p>
+            </div>
+            {% endif %}
+        {% endif %}
+
+        <div class="button-container">
+            <a href="/" class="back-button">← Back to Search</a>
+        </div>
+
+        <div class="footer">
+            <p>CTF Challenge Service © 2024</p>
+        </div>
+    </div>
+</body>
+</html>
