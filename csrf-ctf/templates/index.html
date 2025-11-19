@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Profile Manager{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 40px 0;">
+    <h2 style="color: #333; margin-bottom: 30px;">Welcome to Profile Manager</h2>
+    <p style="color: #666; margin-bottom: 30px; font-size: 18px;">
+        Manage your profile and connect with other users
+    </p>
+    <div style="display: flex; gap: 20px; justify-content: center;">
+        <a href="{{ url_for('login') }}" class="btn">Login</a>
+        <a href="{{ url_for('register') }}" class="btn">Register</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Report URL{% endblock %}
+
+{% block header %}Report URL{% endblock %}
+
+{% block content %}
+    {% if success %}
+    <div class="success">{{ success }}</div>
+    {% endif %}
+
+    <p style="margin-bottom: 20px; color: #666;">
+        Found a suspicious link? Report it to the administrator for review.
+    </p>
+
+    <form method="POST" action="{{ url_for('report') }}">
+        <div class="form-group">
+            <label for="url">URL:</label>
+            <input type="text" name="url" id="url" placeholder="https://example.com/page" required>
+        </div>
+
+        <button type="submit">Submit Report</button>
+    </form>
+{% endblock %}

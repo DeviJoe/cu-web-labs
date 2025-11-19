@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Users - Profile Manager{% endblock %}
+
+{% block header %}All Users{% endblock %}
+
+{% block content %}
+<h2>Registered Users</h2>
+<p style="color: #666; margin-bottom: 20px;">Browse profiles of other users</p>
+
+{% if users %}
+    {% for user in users %}
+    <div class="user-card">
+        <h3>{{ user['username'] }}</h3>
+        {% if user['website'] %}
+        <p><strong>Website:</strong> <a href="{{ user['website'] }}" target="_blank">{{ user['website'] }}</a></p>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No users found.</p>
+{% endif %}
+{% endblock %}

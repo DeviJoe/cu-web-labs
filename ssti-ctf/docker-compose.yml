@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  ssti-ctf:
+    build: .
+    container_name: ssti-ctf-service
+    ports:
+      - "5040:5000"
+    environment:
+      - FLAG=centralctf{t3mpl4t3_1nj3ct10n_1s_d4ng3r0us}
+    restart: unless-stopped

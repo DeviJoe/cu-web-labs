@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>XML Parser Service - CTF Challenge</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                padding: 20px;
+                color: #333;
+            }
+
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                overflow: hidden;
+            }
+
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 40px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            .header p {
+                font-size: 1.2em;
+                opacity: 0.9;
+            }
+
+            .content {
+                padding: 40px;
+            }
+
+            .section {
+                margin-bottom: 30px;
+            }
+
+            .section h2 {
+                color: #667eea;
+                margin-bottom: 15px;
+                font-size: 1.8em;
+            }
+
+            .section p {
+                line-height: 1.6;
+                color: #555;
+                margin-bottom: 10px;
+            }
+
+            .code-block {
+                background: #f5f5f5;
+                border-left: 4px solid #667eea;
+                padding: 15px;
+                border-radius: 5px;
+                overflow-x: auto;
+                margin: 15px 0;
+            }
+
+            .code-block pre {
+                margin: 0;
+                font-family: "Courier New", Courier, monospace;
+                font-size: 14px;
+            }
+
+            .input-section {
+                background: #f9f9f9;
+                padding: 25px;
+                border-radius: 10px;
+                margin-top: 20px;
+            }
+
+            textarea {
+                width: 100%;
+                min-height: 200px;
+                padding: 15px;
+                border: 2px solid #ddd;
+                border-radius: 8px;
+                font-family: "Courier New", Courier, monospace;
+                font-size: 14px;
+                resize: vertical;
+                transition: border-color 0.3s;
+            }
+
+            textarea:focus {
+                outline: none;
+                border-color: #667eea;
+            }
+
+            .button {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 12px 30px;
+                font-size: 16px;
+                border-radius: 8px;
+                cursor: pointer;
+                margin-top: 15px;
+                transition:
+                    transform 0.2s,
+                    box-shadow 0.2s;
+            }
+
+            .button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            }
+
+            .button:active {
+                transform: translateY(0);
+            }
+
+            .response {
+                margin-top: 20px;
+                padding: 20px;
+                border-radius: 8px;
+                display: none;
+            }
+
+            .response.success {
+                background: #d4edda;
+                border: 1px solid #c3e6cb;
+                color: #155724;
+            }
+
+            .response.error {
+                background: #f8d7da;
+                border: 1px solid #f5c6cb;
+                color: #721c24;
+            }
+
+            .response pre {
+                margin-top: 10px;
+                background: rgba(0, 0, 0, 0.05);
+                padding: 10px;
+                border-radius: 5px;
+                overflow-x: auto;
+            }
+
+            .links {
+                display: flex;
+                gap: 15px;
+                margin-top: 20px;
+                flex-wrap: wrap;
+            }
+
+            .link-button {
+                display: inline-block;
+                padding: 10px 20px;
+                background: #667eea;
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: background 0.3s;
+            }
+
+            .link-button:hover {
+                background: #764ba2;
+            }
+
+            .warning {
+                background: #fff3cd;
+                border: 1px solid #ffc107;
+                color: #856404;
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+            }
+
+            .warning strong {
+                display: block;
+                margin-bottom: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🎯 XML Parser Service</h1>
+                <p>CTF Challenge: Find the hidden flag!</p>
+            </div>
+
+            <div class="content">
+                <div class="warning">
+                    <strong>🎯 Цель задания:</strong>
+                    Найдите флаг формата <code>centralctf{...}</code>, который
+                    хранится на сервере.
+                </div>
+
+                <div class="section">
+                    <h2>📋 Описание</h2>
+                    <p>
+                        Этот сервис предоставляет API для парсинга XML
+                        документов. Отправьте XML данные на endpoint
+                        <code>/api/parse</code>, и сервис обработает их.
+                        Исследуйте возможности сервиса и найдите способ получить
+                        флаг.
+                    </p>
+                </div>
+
+                <div class="section">
+                    <h2>📝 Пример XML</h2>
+                    <div class="code-block">
+                        <pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;user&gt;
+    &lt;name&gt;John Doe&lt;/name&gt;
+    &lt;email&gt;john@example.com&lt;/email&gt;
+    &lt;message&gt;Hello, World!&lt;/message&gt;
+&lt;/user&gt;</pre
+                        >
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>🧪 Тестирование</h2>
+                    <div class="input-section">
+                        <label for="xmlInput"
+                            ><strong>Введите XML для парсинга:</strong></label
+                        >
+                        <textarea
+                            id="xmlInput"
+                            placeholder="Вставьте ваш XML здесь..."
+                        >
+<?xml version="1.0" encoding="UTF-8"?>
+<user>
+    <name>John Doe</name>
+    <email>john@example.com</email>
+    <message>Hello, World!</message>
+</user></textarea
+                        >
+                        <button class="button" onclick="sendXML()">
+                            Отправить XML
+                        </button>
+                        <div id="response" class="response"></div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>🔗 Полезные ссылки</h2>
+                    <div class="links">
+                        <a
+                            href="/api/example"
+                            class="link-button"
+                            target="_blank"
+                            >Пример API</a
+                        >
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>💡 Подсказка</h2>
+                    <p>
+                        XML - это мощный формат данных с богатой
+                        функциональностью. Изучите спецификацию XML и
+                        возможности парсеров. Подумайте, как можно
+                        взаимодействовать с серверной системой через XML.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            async function sendXML() {
+                const xmlInput = document.getElementById("xmlInput").value;
+                const responseDiv = document.getElementById("response");
+
+                if (!xmlInput.trim()) {
+                    showResponse("Пожалуйста, введите XML!", "error");
+                    return;
+                }
+
+                try {
+                    const response = await fetch("/api/parse", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/xml",
+                        },
+                        body: xmlInput,
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        showResponse(
+                            "Успешно!\n" + JSON.stringify(data, null, 2),
+                            "success",
+                        );
+                    } else {
+                        showResponse(
+                            "Ошибка:\n" + JSON.stringify(data, null, 2),
+                            "error",
+                        );
+                    }
+                } catch (error) {
+                    showResponse(
+                        "Ошибка соединения: " + error.message,
+                        "error",
+                    );
+                }
+            }
+
+            function showResponse(message, type) {
+                const responseDiv = document.getElementById("response");
+                responseDiv.className = "response " + type;
+                responseDiv.innerHTML = "<pre>" + message + "</pre>";
+                responseDiv.style.display = "block";
+            }
+        </script>
+    </body>
+</html>

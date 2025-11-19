@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  xxe-ctf:
+    build: .
+    container_name: xxe-ctf-service
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      - FLASK_APP=app.py
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Монтируем флаг для удобства изменения (опционально)
+      - ./flag.txt:/app/flag.txt:ro
+      - ./flag.txt:/flag.txt:ro
+    networks:
+      - ctf-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  ctf-network:
+    driver: bridge

@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    ports:
+      - "5030:5000"
+    environment:
+      - FLAG=centralctf{csrf_1s_n0t_d3ad_yet}
+    restart: unless-stopped
